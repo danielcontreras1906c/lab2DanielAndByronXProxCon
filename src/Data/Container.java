@@ -9,28 +9,18 @@ package Data;
  
 public class Container {
 
-    private String name;
     private int amount;
     private boolean producido = false;
 
-    public Container(String name, int amount) {
-        this.name = name;
+    public Container(int amount) {
         this.amount = amount;
     }
+    
 
     public Container() {
-        this.name = "leche";
-        this.amount = 20;
-        
+        this.amount = 0;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public int getAmount() {
         return amount;
@@ -43,10 +33,10 @@ public class Container {
     
       public synchronized void consume() throws InterruptedException{
           if (amount <= 0 ) {//es innecesaria la segunda condicion eliminar
-              System.out.printf("[%s] CONSUMO SIN REALIZAR | Recipiente vacio%n",
-                      Thread.currentThread().getName());
              
               while (!producido) {                  
+                  System.out.printf("[%s] EN ESPERA | Recipiente vacio; esperando un dato%n",
+                          Thread.currentThread().getName());
                   wait();
               }
           }
@@ -55,12 +45,15 @@ public class Container {
          System.out.printf("[%s] CONSUMO | Cantidad: %d -> %d%n",
                  Thread.currentThread().getName(), previousAmount, this.amount);
           producido = false;
+          notifyAll();
           
    }
     
       public synchronized void produce(int amount) throws InterruptedException{
           
           while (producido) {              
+              System.out.printf("[%s] EN ESPERA | Recipiente lleno; esperando que se consuma%n",
+                      Thread.currentThread().getName());
               wait();
           }
           
