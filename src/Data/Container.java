@@ -23,18 +23,22 @@ public class Container {
         return amount;
     }
 
-    public synchronized void consume() throws InterruptedException {
+    public synchronized void consume(int resta, String name) throws InterruptedException {
         while (!producido) {
-            System.out.printf("[%s] EN ESPERA | Recipiente vacio; esperando un dato%n",
-                    Thread.currentThread().getName());
+           // System.out.printf("[%s] EN ESPERA | Recipiente vacio; esperando un dato%n",
+             //       Thread.currentThread().getName());
             wait();
         }
-        int previousAmount = this.amount;
-        this.amount = 0;
-        System.out.printf("[%s] CONSUMO | Cantidad: %d -> %d%n",
-                Thread.currentThread().getName(), previousAmount, this.amount);
-        producido = false;
-        notifyAll();
+        if ((this.amount - resta) < 0) {
+            Thread.sleep(1500);
+        } else {
+            int previousAmount = this.amount;
+            this.amount -= resta;
+            System.out.printf("Consumidor " + name + "[%s] CONSUMO | Cantidad: %d -> %d%n",
+                    Thread.currentThread().getName(), previousAmount, this.amount);
+            producido = false;
+            notifyAll();
+        }
 
     }
 
@@ -46,7 +50,7 @@ public class Container {
         }
 
         int previousAmount = this.amount;
-        this.amount = amount;
+        this.amount += amount;
         System.out.printf("[%s] PRODUCCION | Valor: %d | Cantidad: %d -> %d%n",
                 Thread.currentThread().getName(), amount, previousAmount, this.amount);
 

@@ -18,11 +18,14 @@ public class Producer extends Thread {
 
     @Override
     public void run() {
+        int i = 0;
+        while (!Thread.currentThread().isInterrupted()) {
 
-        for (int i = 0; i < 10; i++) {
+            i++;
             System.out.printf("[%s] Iteracion %d/10 | Intentando producir%n", getName(), i + 1);
             try {
-                container.produce(i);
+                //  container.produce(i + 1);
+                container.produce(ThreadLocalRandom.current().nextInt(1, 4));
             } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
                 System.out.printf("[%s] Hilo interrumpido; terminando%n", getName());
@@ -30,7 +33,7 @@ public class Producer extends Thread {
             }
 
             try {
-                int pause = ThreadLocalRandom.current().nextInt(1000, 2001);
+                int pause = ThreadLocalRandom.current().nextInt(700, 1200);
                 System.out.printf("[%s] Pausa de %d ms%n", getName(), pause);
                 Producer.sleep(pause);
             } catch (InterruptedException ex) {
