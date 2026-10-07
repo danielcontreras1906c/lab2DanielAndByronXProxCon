@@ -22,8 +22,8 @@ public class Main {
         producer.setName("Productor");
         System.out.printf("[Principal] Recipiente compartido | Cantidad inicial: %d%n", container.getAmount());
 
-        producer.start();
         consumer.start();
+        producer.start();
 
     }
 
