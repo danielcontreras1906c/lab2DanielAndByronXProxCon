@@ -32,7 +32,7 @@ public class Consumer extends Thread {
 
         while (!Thread.currentThread().isInterrupted()) {
             i++;
-            System.out.printf("[%s] Iteracion %d/10 | Intentando consumir%n", getName(), i + 1);
+            System.out.printf("Consumer "+name +"[%s] Iteracion %d/10 | Intentando consumir%n", getName(), i + 1);
             try {
                 container.consume(ThreadLocalRandom.current().nextInt(1, 3), name);
             } catch (InterruptedException ex) {
