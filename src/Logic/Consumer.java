@@ -34,14 +34,18 @@ public class Consumer extends Thread {
             try {
                 container.consume();
             } catch (InterruptedException ex) {
-                System.getLogger(Consumer.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+                Thread.currentThread().interrupt();
+                System.out.printf("[%s] Hilo interrumpido; terminando%n", getName());
+                return;
             }
             try {
                 int pause = ThreadLocalRandom.current().nextInt(1000, 2001);
                 System.out.printf("[%s] Pausa de %d ms%n", getName(), pause);
                 Consumer.sleep(pause);
             } catch (InterruptedException ex) {
-                System.getLogger(Consumer.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+                Thread.currentThread().interrupt();
+                System.out.printf("[%s] Hilo interrumpido; terminando%n", getName());
+                return;
             }
         }
         System.out.printf("[%s] Hilo terminado%n", getName());

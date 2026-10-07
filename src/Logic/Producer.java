@@ -24,7 +24,9 @@ public class Producer extends Thread {
             try {
                 container.produce(i);
             } catch (InterruptedException ex) {
-                System.getLogger(Producer.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);//quitar esto
+                Thread.currentThread().interrupt();
+                System.out.printf("[%s] Hilo interrumpido; terminando%n", getName());
+                return;
             }
 
             try {
@@ -32,7 +34,9 @@ public class Producer extends Thread {
                 System.out.printf("[%s] Pausa de %d ms%n", getName(), pause);
                 Producer.sleep(pause);
             } catch (InterruptedException ex) {
-                System.getLogger(Producer.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+                Thread.currentThread().interrupt();
+                System.out.printf("[%s] Hilo interrumpido; terminando%n", getName());
+                return;
             }
         }
         System.out.printf("[%s] Hilo terminado%n", getName());
